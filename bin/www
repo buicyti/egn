@@ -1,0 +1,99 @@
+#!/usr/bin/env node
+
+require('dotenv').config({
+  path: '.env',
+});
+
+const {
+  HTTP_HOST,
+  PORT
+} = process.env;
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('egn:server');
+var http = require('http');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port, HTTP_HOST);
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 80 && port < 65535) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string' ?
+    'Pipe ' + port :
+    'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' yêu cầu đặc quyền nâng cao');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' đang được sử dụng trên ứng dụng khác');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string' ?
+    'pipe ' + addr :
+    'port ' + addr.port;
+  debug('Listening on ' + bind);
+  console.log('Đang nghe ở địa chỉ: ', addr.address, ', ', bind);
+}

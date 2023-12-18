@@ -1,0 +1,216 @@
+.menu-bar {
+    margin: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    min-height: 500px;
+}
+
+.todo-menu {
+    -ms-flex: 0 0 230px;
+    flex: 0 0 230px;
+    width: 230px;
+    padding: 0;
+    background-color: var(--headerbackground);
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.todo-menu .header {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.todo-menu li {
+    margin: 5px 10px;
+    padding: 5px 15px;
+    font-weight: 700;
+    position: relative;
+}
+
+
+.todo-menu li.active,
+.todo-menu li:hover {
+    color: var(--bs-secondary);
+}
+
+.todo-menu li.active:after,
+.todo-menu li:hover:after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: var(--bs-secondary);
+    opacity: 0.2;
+    left: 0px;
+    top: 0px;
+    z-index: 0;
+    border-radius: 20px;
+}
+
+.list-menu {
+    -ms-flex: 0 0 auto;
+    flex: 0 0 auto;
+    width: calc(100% - 230px);
+    border-left: 1px solid var(--border-color);
+    padding: 0;
+    background-color: var(--headerbackground);
+    border-bottom-right-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.list-menu i {
+    font-size: 24px;
+    height: 100%;
+    padding: 0.375rem 0.75rem;
+    color: var(--bs-body-color);
+}
+
+.list-menu i.active {
+    color: var(--bs-info);
+}
+
+
+
+.documents {
+    padding: 10px;
+    margin: 0px;
+    min-width: 600px;
+    border-bottom-right-radius: 25px;
+    overflow: auto;
+}
+
+
+
+
+.list .document {
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 0.75rem 0.625rem;
+    margin-bottom: .5rem;
+    margin-right: 0.625rem;
+    position: relative;
+    display: inline-flex;
+    word-wrap: break-word;
+    justify-content: space-between;
+    transition: all 0.35s ease;
+    min-width: 100%;
+    height: 70px;
+    font-size: 14px;
+}
+
+.list .document .document-info {
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 200px;
+    width: 200px;
+}
+
+.list .document .document-info:nth-child(1) {
+    flex: 0 0 300px;
+    width: 300px;
+}
+
+.list .document .document-info:nth-child(2),
+.list .document .document-info:nth-child(3),
+.list .document .document-info:nth-child(5) {
+    flex: 0 0 100px;
+    width: 100px;
+}
+
+.list .document .document-info.thumbnail {
+    flex-direction: row;
+}
+
+.list .document .document-info img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    border-radius: 5px;
+    align-self: center;
+
+}
+
+.document .action i {
+    font-size: 16px;
+    padding: 0 .25rem;
+}
+
+.documents.grid {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.grid .document {
+    margin-bottom: 10px;
+    margin-right: 10px;
+    border-radius: 6px;
+    transition: all 0.35s ease;
+    -ms-flex: 0 0 calc(25% - 10px);
+    flex: 0 0 calc(25% - 10px);
+    position: relative;
+    padding: 15px;
+    font-size: 14px;
+}
+
+.grid .document .document-info {
+    margin-bottom: 10px;
+}
+
+.grid .document .document-info.thumbnail .img-fluid {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    height: auto;
+    max-height: 200px;
+}
+
+
+.formUpload {
+    width: 100%;
+    height: 100%;
+    min-height: 200px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    border: 5px dashed var(--border-color);
+}
+
+.formUpload input {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    opacity: 0;
+}
+
+.formUpload i {
+    font-size: 48px;
+    margin-bottom: 1rem;
+}
+
+.formUpload label {
+    margin-bottom: 1rem;
+
+}
+
+.formUpload label {
+    text-align: center;
+}
+
+
+
+
+@media (max-width: 991px) {
+    .list-menu {
+        width: 100%;
+        border-left-width: 0px;
+    }
+}

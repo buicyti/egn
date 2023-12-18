@@ -1,0 +1,108 @@
+<!-- START: Header-->
+<header class="fixed-top">
+    <nav class="navbar navbar-expand-lg p-0">
+        <!-- Logo -->
+        <a href="/" class="d-flex justify-content-center align-items-center logo-bar text-left">
+            <img src="/images/default/logo_for_light.svg" alt="Hansol" class="full-logo">
+            <img src="/images/default/default-small.svg" alt="Hansol" class="small-logo">
+        </a>
+
+        <!-- Toogle button -->
+        <div class="text-center align-self-center collapse-menu-bar">
+            <i class="fa-solid fa-align-justify"></i>
+        </div>
+
+        <!-- Sidebar -->
+        <ul class="sidebar-menu">
+            <% locals.nav && nav.map( roots => { %>
+            <li <%- roots.children ? ' class="dropdown"' : '' %>>
+                <a href="<%= roots.url %>"><i class="<%= roots.icon %>"></i> <%= roots.name %></a>
+                <% if(roots.children){ %>
+                <ul>
+                    <% roots.children.map(root =>{ %>
+                    <li <%- root.children ? ' class="dropdown"' : '' %>>
+                        <a href="<%= root.url %>">
+                            <i class="<%= root.icon %>"></i>
+                            <%= root.name %>
+                        </a>
+                        <% if(root.children){ %>
+                        <ul class="sub-menu">
+                            <% root.children.map(roo =>{ %>
+                            <li>
+                                <a href="<%= roo.url %>">
+                                    <i class="<%= roo.icon %>"></i>
+                                    <%= roo.name %>
+                                </a>
+                            </li>
+                            <% }) %>
+                        </ul>
+                        <% } %>
+                    </li>
+                    <% }) %>
+                </ul>
+                <% } %>
+            </li>
+            <% }) %>
+        </ul>
+
+
+        <div class="end-sidebar"></div>
+        <!-- User -->
+        <ul class="user-profile">
+            <li class="dropdown align-self-center d-inline-block">
+                <div class="media nav-link" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="/images/avatars/<%= userInfo.id_employee %>.jpg"
+                        onerror="this.src='/images/default/default-user-icon.png'" alt=""
+                        class="d-flex img-fluid rounded-circle" />
+                    <div class="user-text">
+                        <h6>
+                            <%= (locals.userInfo && userInfo.name_employee) ? userInfo.name_employee : 'Alex Ferguson'%>
+                        </h6>
+                        <p class="text-muted mb-0">
+                            <%= (locals.userInfo && userInfo.job) ? userInfo.job : 'Nhân viên'%>
+                        </p>
+                    </div>
+                </div>
+
+
+                <div class="dropdown-menu dropdown-menu-end p-0" aria-labelledby="dropdownUser">
+                    <a href="/employees/infomation/<%= locals.userInfo.id_employee %>" class="dropdown-item p-2">
+                        <i class="fa-regular fa-user"></i>
+                        Thông tin cá nhân
+                    </a>
+                    <a href="/auth/setting" class="dropdown-item px-2">
+                        <i class="fa-solid fa-gears"></i>
+                        Cài đặt
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="" class="dropdown-item p-2">
+                        <i class="fa-solid fa-circle-half-stroke"></i>
+                        <input type="checkbox" id="changeTheme" style="display: none;">
+                        <label for="changeTheme"> Giao diện</label>
+                    </a>
+                    <a href="" class="dropdown-item p-2">
+                        <i class="fa-brands fa-rocketchat"></i>
+                        Chat
+                    </a>
+                    <a href="" class="dropdown-item p-2">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        Liên hệ hỗ trợ
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="/auth/logout" class="dropdown-item p-2 text-danger d-flex justify-content-between">
+                        <span><i class="fa-solid fa-power-off"></i> Sign Out</span>
+                        <i class="fa-solid fa-right-from-bracket me-1"></i>
+                    </a>
+                </div>
+
+            </li>
+
+        </ul>
+
+
+    </nav>
+</header>
+<!-- END: Header-->
+
+<main>
+    <div class="main-wrapper">

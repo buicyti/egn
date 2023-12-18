@@ -1,0 +1,271 @@
+<%- include('../../includes/header') %>
+<%- include('../../includes/top') %>
+<link rel="stylesheet" href="/vendor/datatables/css/datatables.min.css">
+<link rel="stylesheet" href="/vendor/daterangepicker/daterangepicker.css">
+<link rel="stylesheet" href="/vendor/select2/css/select2.min.css">
+<style>
+    .select2-container--default .select2-selection--multiple {
+        border-color: var(--border-color);
+    }
+
+    .select2-container--default.select2-container--focus .select2-selection--multiple {
+        border-color: var(--border-color);
+    }
+
+    .cuoituan {
+        background-color: var(--cuoi-tuan-color) !important;
+    }
+</style>
+
+<div class="row">
+    <div class="col-12 align-self-center">
+        <div class="mt-2 py-3 align-self-center d-flex">
+            <h4 class="mb-0">Kết quả đo tĩnh điện</h4>
+            <ol class="ms-auto breadcrumb bg-transparent align-self-center m-0 p-0">
+                <li class="breadcrumb-item">Nhân viên</li>
+                <li class="breadcrumb-item">ESD</li>
+                <li class="breadcrumb-item active"><a href="#">Xem</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <input type="text" class="form-control border-0" id="searchTable" placeholder="Tìm kiếm ...">
+        <div class="">
+            <!-- <img class="icons-list" src="/images/default/add-employees.png" alt="Thêm nhân viên" /> -->
+            <div class="dropdown">
+                <img class="icons-list" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="false"
+                    src="/images/default/filter.png" alt="Import Employee" />
+                <div class="dropdown-menu" style="min-width: 250px; padding: 20px 5px">
+                    <div class="mb-3">
+                        <label for="deporvong" class="form-label fw-bold">Kiểu đo</label>
+                        <select class="form-select" id="deporvong">
+                            <option value="1">Đo dép</option>
+                            <option value="2">Đo Wrist strap</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="searchTime" class="form-label fw-bold">Thời gian</label>
+                        <input type="text" class="form-control" id="searchTime">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Nhóm</label>
+                        <select class="form-select" id="gr" style="width: 100%;" multiple>
+                            <% if(locals.userPermision.toString().match(/(superadmin)/)){ %>
+                            <%  locals.listPart && listPart.map(p => { %>
+                            <option value="<%= p %>"><%= p %></option>
+                            <% }) %>
+                            <%} else { %>
+                            <option value="<%= locals.userInfo.part %>"><%= locals.userInfo.part %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Ca</label>
+                        <select class="form-select" id="sf" style="width: 100%;" multiple>
+                            <% if(locals.userPermision.toString().match(/(superadmin)/)){ %>
+                            <%  locals.listShift && listShift.map(p => { %>
+                            <option value="<%= p %>"><%= p %></option>
+                            <% }) %>
+                            <%} else { %>
+                            <option value="<%= locals.userInfo.shift %>"><%= locals.userInfo.shift %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button type="button" class="btn btn-primary" id="applyESD">Apply</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered align-middle" id="listESD"
+                style="min-width: 1000px; width: 100%; max-height: calc(100vh - 100px);">
+
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="/vendor/datatables/js/datatables.min.js"></script>
+<script src="/vendor/moment/moment.min.js"></script>
+<script src="/vendor/select2/js/select2.min.js"></script>
+<script src="/vendor/daterangepicker/daterangepicker.js"></script>
+<script>
+    var daysOfWeek = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7']
+    $(function () {
+        var start = moment().startOf('month');
+        var end = moment().endOf('month');
+
+        function cb(start, end) {
+            $('#searchTime').html(start + ' - ' + end);
+        }
+
+        $('#searchTime').daterangepicker({
+            startDate: start,
+            endDate: end,
+            opens: 'right',
+            drops: "down",
+            ranges: {
+                'Hôm nay': [moment(), moment()],
+                'Hôm qua': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                '7 ngày trước': [moment().subtract(6, 'days'), moment()],
+                '30 ngày trước': [moment().subtract(29, 'days'), moment()],
+                'Tháng này': [moment().startOf('month'), moment().endOf('month')],
+                'Tháng trước': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1,
+                    'month').endOf('month')]
+            },
+            locale: {
+                customRangeLabel: 'Tùy Chọn',
+                daysOfWeek: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
+                monthNames: ['Tháng Giêng', 'Tháng Hai', 'Tháng Ba', 'Tháng Tư', 'Tháng Năm',
+                    'Tháng Sáu', 'Tháng Bảy', 'Tháng Tám', 'Tháng Chín', 'Tháng Mười',
+                    'Tháng Mười Một', 'Tháng Mười hai'
+                ],
+                firstDay: 1
+            }
+        }, cb);
+
+        cb(start, end);
+    });
+
+
+    $('#gr').select2({
+        placeholder: 'Chọn tất cả',
+        closeOnSelect: false,
+    })
+    $('#sf').select2({
+        placeholder: 'Chọn tất cả',
+        closeOnSelect: false
+    })
+
+    $('#applyESD').on('click', function () {
+        dataTablesESD.destroy();
+        $('#listESD').empty();
+        loadESD();
+        $('.dropdown img.icons-list').trigger('click');
+    })
+
+
+
+    /*  new DataTable('#e', {
+         ajax: {
+             url: '/dashboard/load',
+             type: 'POST',
+             data: {
+                 user_id: 451
+             }
+         },
+         columns: [{
+                 data: 'first_name'
+             },
+             {
+                 data: 'last_name'
+             }
+         ],
+         processing: true,
+         serverSide: true
+     }); */
+
+    const loadESD = async () => {
+        fetch("/employees/esd/load", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    fType: $('#deporvong').val(),
+                    fTime: $('#searchTime').val(),
+                    fGr: $('#gr').val().length !== 0 ?
+                        $('#gr').val() : $("#gr option").map(function () {
+                            return $(this).val()
+                        }).get(),
+                    fSf: $('#sf').val().length !== 0 ?
+                        $('#sf').val() : $("#sf option").map(function () {
+                            return $(this).val()
+                        }).get()
+                })
+            })
+            .then(res => {
+                if (res.ok) return res.json();
+                throw new Error('Request failed.');
+            }).then(data => {
+                //console.log(data);
+                var columns = [];
+                $('#listESD').html(
+                    `<thead class="text-center">
+                        <tr>
+                            <th rowspan="2">Mã nhân viên</th>
+                            <th rowspan="2">Tên nhân viên</th>
+                            <th rowspan="2">Nhóm</th>
+                            <th rowspan="2">Ca</th>
+                        </tr>
+                        <tr></tr>
+                    </thead>`
+                );
+                Object.keys(data[0]).map(header => {
+
+                    if (header.indexOf('D') == 0) {
+                        var h = header.substring(1).replaceAll('_', '-');
+                        var cl = moment(h).format('ddd').match(/(Sun|Sat)/) ? 'dt-center cuoituan' :
+                            'dt-center';
+                        $('#listESD thead tr:eq(0)').append(
+                            `<th class="${cl}">
+                                ${daysOfWeek[moment(h).format('d')]}
+                            </th>`
+                        );
+                        $('#listESD thead tr:eq(1)').append(`<th>${moment(h).format('DD')}</th>`);
+                        columns.push({
+                            data: header,
+                            className: cl,
+                            render: function (data, type, row) {
+                                if (data == "1")
+                                    return `<span class="text-primary">OK</span>`;
+                                else if (data == "2")
+                                    return `<span class="text-danger">NG</span>`;
+                                else if (data == "3")
+                                    return `<span class="text-secondary">OFF</span>`;
+                                else return `-`;
+                            }
+                        })
+                    } else {
+                        columns.push({
+                            data: header
+                        })
+                    }
+
+                })
+
+                dataTablesESD = $('#listESD').DataTable({
+                    data: data,
+                    columns: columns,
+                    columnDefs: [{
+                        targets: [1],
+                        width: '200px'
+                    }],
+                })
+
+
+                //ẩn thanh tìm kiếm của bảng
+                $('#listESD_wrapper .row:eq(0)').css('opacity', '0').css('height', '1px');
+            })
+            .catch((err) => ("Error occured", err));
+    }
+
+
+    $('#searchTable').on('change', function () {
+        dataTablesESD.search($(this).val()).draw()
+    })
+
+    $(document).ready(function () {
+        loadESD();
+    });
+</script>
+<%- include('../../includes/footer') %>

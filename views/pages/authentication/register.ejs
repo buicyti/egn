@@ -1,0 +1,237 @@
+<%- include('../../includes/header') %>
+<link rel="stylesheet" href="/stylesheets/auth.css">
+
+<div class="container">
+    <div class="vh-100 d-flex justify-content-between align-items-center">
+        <div class="row lockscreen">
+            <div class="lock-image col-12 col-md-6"></div>
+            <div class="login-form col-12 col-md-6 p-3">
+                <h3 class="fw-bold mb-3">Register</h3>
+                <div class="form-group mb-3">
+                    <label for="user_register">Username</label>
+                    <input class="form-control" type="text" name="user_register" id="user_register"
+                        placeholder="Tên tài khoản" autocomplete="on">
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="id_employee">ID Employee</label>
+                    <input class="form-control" type="text" name="id_employee" id="id_employee"
+                        placeholder="Mã nhân viên" autocomplete="on">
+                </div>
+
+                <div class="form-group password mb-3">
+                    <label for="pass_register">Password</label>
+                    <input class="form-control" type="password" id="pass_register" name="pass_register"
+                        placeholder="Mật khẩu">
+                    <i class="fa-solid fa-eye"></i>
+                </div>
+
+                <div class="form-group password mb-3">
+                    <label for="re_pass_register">Re-password</label>
+                    <input class="form-control" type="password" id="re_pass_register" name="re_pass_register"
+                        placeholder="Nhập lại mật khẩu">
+                    <i class="fa-solid fa-eye"></i>
+                </div>
+
+                <div class="form-check mb-3">
+                    <input type="checkbox" class="form-check-input" name="checkboxsignin" id="checkboxsignin"
+                        checked="true">
+                    <label class="form-check-label" for="checkboxsignin"> Đồng ý với quy định và bảo mật của công
+                        ty.</label>
+                </div>
+
+                <div class="form-group mb-0">
+                    <button class="btn btn-primary" type="button" id="register"> Đăng ký </button>
+                </div>
+
+
+
+
+                <div class="mt-2">Bạn đã có tài khoản? Quay lại trang <a href="/auth/login">đăng nhập</a></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="/vendor/sweetalert/sweetalert2.all.min.js"></script>
+<script type="text/javascript">
+    var regCheck = {
+        username: false,
+        id_employee: false,
+        password: false,
+        re_password: false
+    };
+
+    $('.form-group.password i').on('click', function () {
+        if ($(this).hasClass('fa-eye')) {
+            $(this).parent().find('input').attr('type', 'text')
+            $(this).removeClass('fa-eye fa-eye-slash').addClass('fa-eye-slash')
+        } else {
+            $(this).parent().find('input').attr('type', 'password')
+            $(this).removeClass('fa-eye fa-eye-slash').addClass('fa-eye')
+        }
+    })
+
+
+    $('#user_register').change(async e => {
+        regCheck.username = false;
+        var link = '/auth/register/checkUser';
+        var data = {
+            userRegister: $(e.currentTarget).val()
+        }
+
+        var acc = await getFetch(link, data)
+        $(e.currentTarget).val(acc.value)
+        if (!Array.isArray(acc) && (acc.success || acc.error)) {
+            var sp = $(e.currentTarget).parent().find('span')
+            if (!sp.length) {
+                $(e.currentTarget).parent().append('<span></span>')
+                sp = $(e.currentTarget).parent().find('span')
+            }
+            if (acc.success) {
+                regCheck.username = true;
+                sp.removeClass('text-danger text-success').addClass('text-success');
+                sp.html(acc.success)
+            } else if (acc.error) {
+                sp.removeClass('text-danger text-success').addClass('text-danger');
+                sp.html(acc.error)
+            }
+        }
+    })
+
+    $('#id_employee').change(async e => {
+        regCheck.id_employee = false;
+        var link = '/auth/register/checkID';
+        var data = {
+            userID: $(e.currentTarget).val()
+        }
+
+        var id_emp = await getFetch(link, data)
+        if (!Array.isArray(id_emp) && (id_emp.success || id_emp.error)) {
+            var sp = $(e.currentTarget).parent().find('span')
+            if (!sp.length) {
+                $(e.currentTarget).parent().append('<span></span>')
+                sp = $(e.currentTarget).parent().find('span')
+            }
+            if (id_emp.success) {
+                regCheck.id_employee = true;
+                sp.removeClass('text-danger text-success').addClass('text-success');
+                sp.html(id_emp.success)
+            } else if (id_emp.error) {
+                sp.removeClass('text-danger text-success').addClass('text-danger');
+                sp.html(id_emp.error)
+            }
+        }
+    })
+
+    $('#pass_register').change(async e => {
+        regCheck.password = false;
+        //gửi tin kiểm tra về server
+        var link = '/auth/register/checkPass';
+        var data = {
+            userPassword: $(e.currentTarget).val()
+        }
+        var pas = await getFetch(link, data)
+        //tìm thẻ ul
+        var ul = $(e.currentTarget).parent().find('ul')
+        if (!ul.length) {
+            $(e.currentTarget).parent().append('<ul class="reg-check"></ul>');
+            ul = $(e.currentTarget).parent().find('ul')
+        }
+        //xoá hết li nếu có
+        ul.html('')
+        //in ra thông báo
+        var keysErr = false;
+        Array.isArray(pas) && pas.map(mess => {
+            if (mess.success)
+                ul.append(`<li class="text-success">${mess.success}</li>`)
+            else if (mess.error) {
+                keysErr = true;
+                ul.append(`<li class="text-danger">${mess.error}</li>`)
+            }
+        });
+        if (!keysErr) regCheck.password = true
+        //kiểm tra với 
+        $('#re_pass_register').trigger('change');
+    })
+
+    $('#re_pass_register').change(e => {
+        regCheck.re_password = false;
+        var sp = $(e.currentTarget).parent().find('span')
+        if (!sp.length) {
+            $(e.currentTarget).parent().append('<span></span>')
+            sp = $(e.currentTarget).parent().find('span')
+        }
+        if ($(e.currentTarget).val() == $('#pass_register').val() && $(e.currentTarget).val() != '') {
+            regCheck.re_password = true;
+            sp.removeClass('text-danger text-success').addClass('text-success');
+            sp.html('Khớp mật khẩu')
+        } else {
+            sp.removeClass('text-danger text-success').addClass('text-danger');
+            sp.html('Mật khẩu nhập lại không đúng')
+        }
+    })
+
+    $('#register').click(async () => {
+
+        var check = 0
+        for (const k in regCheck) {
+            if (regCheck[k]) check++;
+        }
+
+
+        if (check == 4) {
+            var link = '/auth/register/reg';
+            var data = {
+                userRegister: $('#user_register').val(),
+                userID: $('#id_employee').val(),
+                userPassword: $('#pass_register').val()
+            }
+            var reg = await getFetch(link, data);
+            reg[0]['username'] && Swal.fire({
+                type: "success",
+                title: "Kết quả!",
+                text: `Đã đăng kí tài khoản <b>${reg[0]['username']}</b>! Liên hệ admin để kích hoạt`,
+                confirmButtonClass: "btn btn-sm btn-success"
+            });
+        } else {
+            $('#user_register').trigger('change');
+            $('#id_employee').trigger('change');
+            $('#pass_register').trigger('change');
+            $('#re_pass_register').trigger('change');
+
+            /* console.log(regCheck)
+            console.log(check) */
+        }
+    })
+    /**
+     * @param {string} value: passwordValue
+     */
+
+
+
+    const getFetch = (link, jsonData) => fetch(link, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jsonData)
+    }).then(res => {
+        if (res.ok) return res.json();
+        return {
+            error: err
+        }
+    }).catch(err => {
+        console.error(err)
+        return {
+            error: err
+        }
+    })
+
+    /*   */
+</script>
+</body>
+
+</html>

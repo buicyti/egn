@@ -1,0 +1,167 @@
+<%- include('../../includes/header') %>
+<%- include('../../includes/top') %>
+
+
+
+
+<div class="row">
+    <div class="col-12 align-self-center">
+        <div class="mt-2 py-3 align-self-center d-flex">
+            <h4 class="mb-0">Tìm số theo thứ tự</h4>
+            <ol class="ms-auto breadcrumb bg-transparent align-self-center m-0 p-0">
+                <li class="breadcrumb-item">Giải trí</li>
+                <li class="breadcrumb-item">Trò chơi</li>
+                <li class="breadcrumb-item active"><a href="#">Tìm số</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+
+<div class="row" style="height: 600px;">
+    <div class="col-12 col-md-3 pe-0">
+        <div class="card menu-section">
+            <div class="card-header">hihi</div>
+            <div class="my-form-group m-2 mt-4">
+                <input type="text" class="form-control" id="maxNumber" required />
+                <label for="maxNumber">Chọn số</label>
+            </div>
+            <div class="my-form-group m-2">
+                <select class="form-select" name="player">
+                    <option value="1">1 người</option>
+                    <option value="2">2 người</option>
+                </select>
+                <label for="maxNumber">Người chơi</label>
+            </div>
+            <input type="button" class="btn btn-sm btn-secondary m-2" id="submit" value="Submit" style="width: auto;" />
+
+
+            <div class="my-form-group m-2 mt-5">
+                <input type="number" class="form-control" id="cohelp" value="0" />
+                <label for="cohelp">Số lần trợ giúp</label>
+            </div>
+
+
+            <div class="timeCount">00:00</div>
+        </div>
+    </div>
+    <div class="col-12 col-md-9 ps-0">
+        <div class="card list-section" id="showNumber"></div>
+    </div>
+</div>
+<style>
+    #showNumber {
+        position: relative;
+        cursor: pointer;
+    }
+
+    .timeCount {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        font-size: 48px;
+        font-weight: 800;
+        text-align: center;
+    }
+
+    .bo {
+        padding: 10px;
+        background-color: transparent;
+        border: 2px solid #8b0ea1;
+        border-radius: 59% 41% 62% 38% / 30% 49% 51% 70%;
+    }
+</style>
+<script>
+    var fNumber = 0,
+        seconds = 0,
+        minutes = 0,
+        cohelp = 0;
+    var countTime;
+    $('#submit').on('click', () => {
+        var maxNumber = parseInt($('#maxNumber').val(), 10)
+        if (isNaN(maxNumber)) maxNumber = 100;
+        if (maxNumber <= 10) maxNumber = 10;
+        if (maxNumber >= 1000) maxNumber = 1000;
+
+        $('#maxNumber').val(maxNumber);
+        $('#showNumber').html('');
+        var arrColor = ['#000', '#f00', '#0f0', 'rgb(14,129,118)'];
+        var arrFontSize = [14, 16, 18, 20, 24, 28, ];
+        var arrFontWeight = [500, 600, 700, 800, 900];
+
+
+
+        seconds = 0;
+        minutes = 0;
+        clearInterval(countTime);
+        for (var i = maxNumber; i >= 1; i--) {
+            var ranHeight = Math.floor(Math.random() * ($('#showNumber').height() - 50));
+            var ranWidth = Math.floor(Math.random() * ($('#showNumber').width() - 50));
+            var ranColor = arrColor[Math.floor(Math.random() * arrColor.length)];
+            var ranFontSize = arrFontSize[Math.floor(Math.random() * arrFontSize.length)];
+            var ranFontWeight = arrFontWeight[Math.floor(Math.random() * arrFontWeight.length)];
+            var ranTransform = Math.floor(Math.random() * 360);
+
+
+            $('#showNumber').append('<p id="n' + i + '" style="position: absolute;' +
+                'top: ' + ranHeight + 'px;' +
+                'left: ' + ranWidth + 'px;' +
+                'color:' + ranColor + ';' +
+                'font-size:' + ranFontSize + 'px;' +
+                'font-weight:' + ranFontWeight + ';' +
+                'transform: rotate(' + ranTransform + 'deg);' +
+                'text-decoration:underline;' +
+                '">' +
+                i + '</p>');
+
+            $('#n' + i).on('click', (e) => {
+                if (parseInt(e.currentTarget.innerHTML) == fNumber) {
+                    //console.log('đúng');
+                    //console.log($(e.currentTarget));
+                    $(e.currentTarget).remove();
+                    fNumber++;
+
+                } else {
+                    //console.log('sai')
+                    alert('Hãy tìm số ' + fNumber);
+                }
+
+                if ($('#showNumber').is(':empty')) {
+                    alert('Tuyệt vời! Bạn đã hoàn thành suất sắc.');
+                    clearInterval(countTime);
+                }
+            })
+
+        }
+        fNumber = 1;
+
+        countTime = setInterval(() => {
+            seconds++;
+            if (seconds == 60) {
+                seconds = 0;
+                minutes++;
+            }
+            $('.timeCount').html(minutes.toString().padStart(2, '0') + ':' + seconds.toString()
+                .padStart(2, '0'))
+        }, 1000)
+
+
+    });
+
+    $('.timeCount').on('click', () => {
+        if ($('#n' + fNumber).hasClass('bo'))
+            return;
+        $('#n' + fNumber).addClass('bo');
+        cohelp++;
+        $('#cohelp').val(cohelp);
+    })
+    //countTime = setInterval(() => {}, 10000) //khai báo ra trước để tí không lỗi
+
+    $(document).ready(function () {
+        $('#submit').click()
+    });
+</script>
+
+
+<%- include('../../includes/footer') %>

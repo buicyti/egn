@@ -1,0 +1,46 @@
+.personal {
+    margin-bottom: 20px;
+}
+
+.personal i {
+    font-size: 24px;
+}
+
+.views-personal {
+    margin-left: 10px;
+}
+
+.views-personal strong {
+    color: var(--color);
+    font-size: 14px;
+    margin-bottom: 0;
+}
+
+.views-personal span {
+    color: var(--color);
+    font-size: 12.5px;
+    font-weight: 500;
+    margin-bottom: 0;
+}
+
+.background-image-maker {
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    background-color: transparent;
+    background-image: url('/images/default/portfolio13.jpg');
+}
+
+
+.nav-pills .nav-link.active,
+.nav-pills .show>.nav-link {
+    background-color: var(--bs-secondary);
+}
+
+.theme-background {
+    background-color: var(--headerbackground);
+}

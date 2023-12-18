@@ -1,0 +1,257 @@
+<%- include('../../includes/header') %>
+<%- include('../../includes/top') %>
+
+<link rel="stylesheet" href="/stylesheets/employees.css">
+
+
+
+
+
+
+<!-- START: Breadcrumbs-->
+<div class="row ">
+    <div class="col-12 align-self-center">
+        <div class="mt-2 py-3 align-self-center d-flex">
+            <h4 class="mb-0">Thông tin của <%= locals.info.name_employee %></h4>
+            <ol class="ms-auto breadcrumb bg-transparent align-self-center m-0 p-0">
+                <li class="breadcrumb-item">Nhân viên</li>
+                <li class="breadcrumb-item">Thông tin</li>
+                <li class="breadcrumb-item active"><a href="#">Xem</a></li>
+            </ol>
+        </div>
+    </div>
+</div>
+<!-- END: Breadcrumbs-->
+
+
+
+
+
+<!-- START: Card Data-->
+<div class="row">
+    <div class="col-12 mt-3">
+        <div class="position-relative">
+            <div class="background-image-maker py-5"></div>
+            <div class="position-relative px-3 py-5">
+                <div class="media d-md-flex d-block">
+                    <img src="/images/avatars/<%= info.id_employee %>.jpg"
+                        onerror="this.src='/images/default/default-user-icon.png'"
+                        alt="<%= info.name_employee ? info.name_employee : 'John Deo'%>"
+                        class="img-fluid rounded-circle" style="width: 150px; aspect-ratio: 1/1;" />
+
+                    <div class="ps-4 d-flex flex-column justify-content-center">
+                        <h1 class="display-4 text-uppercase text-white mb-0">
+                            <%= info.name_employee ? info.name_employee : 'John Deo'%></h1>
+                        <h6 class="text-uppercase text-white mb-0"><%= info.title ? info.title : 'Nhân viên'%>
+                        </h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class=""> -->
+        <div class="mt-2 theme-background border p-2 d-flex justify-content-between">
+
+            <div class="align-self-center">
+                <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-home" type="button" role="tab" aria-controls="pills-home"
+                            aria-selected="true">
+                            Thông tin cá nhân
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-edit"
+                            aria-selected="false">
+                            Chỉnh sửa
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-profile"
+                            aria-selected="false">
+                            Lịch sử
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pills-contact"
+                            aria-selected="false">
+                            Phân quyền
+                        </button>
+                    </li>
+                </ul>
+
+            </div>
+            <div class="align-self-center">
+                <a href="#">
+                    <i class="fa-brands fa-dropbox"></i>
+                </a>
+                <a href="#">
+                    <i class="fa-brands fa-facebook"></i>
+                </a>
+                <a href="#">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+                <a href="#">
+                    <i class="fa-brands fa-google"></i>
+                </a>
+            </div>
+        </div>
+        <!-- </div> -->
+    </div>
+
+
+
+    <div class="col-12 mt-4">
+
+        <div class="tab-content" id="pills-tabContent">
+            <div class="tab-pane fade show active row" id="pills-home">
+                <div class="col-6 card m-2">
+                    <div class="card-body m-2">
+                        <div class="personal d-flex flex-row align-items-center">
+                            <i class="fa-solid fa-user"></i>
+                            <div class="views-personal d-flex flex-column">
+                                <strong>Tên nhân viên</strong>
+                                <span><%= info.name_employee ? info.name_employee : 'Alex Ferguson'%></span>
+                            </div>
+                        </div>
+
+                        <div class="personal d-flex flex-row align-items-center">
+                            <i class="fa-solid fa-key"></i>
+                            <div class="views-personal d-flex flex-column">
+                                <strong>Mã nhân viên</strong>
+                                <span><%= info.id_employee ? info.id_employee : '1040001'%></span>
+                            </div>
+                        </div>
+
+                        <div class="personal d-flex flex-row align-items-center">
+                            <i class="fa-solid fa-compass"></i>
+                            <div class="views-personal d-flex flex-column">
+                                <strong>Khối</strong>
+                                <span><%= info.class ? info.class : 'G-Class'%></span>
+                            </div>
+                        </div>
+
+                        <div class="personal d-flex flex-row align-items-center">
+                            <i class="fa-solid fa-compass"></i>
+                            <div class="views-personal d-flex flex-column">
+                                <strong>Bậc lương</strong>
+                                <span><%= info.rank ? info.rank : 'OP'%> <%= info.rank_no ? info.rank_no : '0'%></span>
+                            </div>
+                        </div>
+
+                        <div class="personal d-flex flex-row align-items-center">
+                            <i class="fa-solid fa-shuttle-space"></i>
+                            <div class="views-personal d-flex flex-column">
+                                <strong>Chức vụ</strong>
+                                <span><%= info.title ? info.title : 'Nhân viên'%></span>
+                            </div>
+                        </div>
+
+                        <div class="personal d-flex flex-row align-items-center">
+                            <i class="fa-solid fa-user-doctor"></i>
+                            <div class="views-personal d-flex flex-column">
+                                <strong>Công việc</strong>
+                                <span><%= info.job ? info.job : '3D-5S'%></span>
+                            </div>
+                        </div>
+
+                        <div class="personal d-flex flex-row align-items-center">
+                            <i class="fa-solid fa-user-doctor"></i>
+                            <div class="views-personal d-flex flex-column">
+                                <strong>Ngày vào</strong>
+                                <span><%= info.join_date ? info.join_date : '01/01/2014'%></span>
+                            </div>
+                        </div>
+
+                        <div class="personal d-flex flex-row align-items-center">
+                            <i class="fa-solid fa-user-group"></i>
+                            <div class="views-personal d-flex flex-column">
+                                <strong>Xưởng</strong>
+                                <span>SMD <%= info.factory ? info.factory  : ''%></span>
+                            </div>
+                        </div>
+
+                        <div class="personal d-flex flex-row align-items-center">
+                            <i class="fa-solid fa-user-group"></i>
+                            <div class="views-personal d-flex flex-column">
+                                <strong>Nhóm</strong>
+                                <span><%= info.part ? info.part : '3M'%></span>
+                            </div>
+                        </div>
+
+                        <div class="personal d-flex flex-row align-items-center">
+                            <i class="fa-solid fa-poop"></i>
+                            <div class="views-personal d-flex flex-column">
+                                <strong>Ca làm việc</strong>
+                                <span><%= info.shift ? info.shift : 'Hành chính'%></span>
+                            </div>
+                        </div>
+
+                        <div class="personal d-flex flex-row align-items-center">
+                            <i class="fa-solid fa-phone"></i>
+                            <div class="views-personal d-flex flex-column">
+                                <strong>Số điện thoại</strong>
+                                <span>Cá nhân: <%= info.phone1 ? info.phone1 : '0123456789'%></span>
+                                <span>Người thân: <%= info.phone2 ? info.phone2 : '0123456789'%></span>
+                            </div>
+                        </div>
+
+                        <div class="personal d-flex flex-row align-items-center">
+                            <i class="fa-solid fa-headset"></i>
+                            <div class="views-personal d-flex flex-column">
+                                <strong>Trình độ</strong>
+                                <span>Cấp: Mầm non</span>
+                                <span>Trường: Mẫu giáo lớn</span>
+                                <span>Chuyên ngành: None</span>
+                            </div>
+                        </div>
+
+                        <div class="personal d-flex flex-row align-items-center">
+                            <i class="fa-solid fa-address-card"></i>
+                            <div class="views-personal d-flex flex-column">
+                                <strong>Hộ khẩu thường trú</strong>
+                                <span><%= info.residence ? info.residence.replaceAll('|', ' - ') : 'Yen Binh IZ, Pho Yen, Thai Nguyen'%></span>
+                            </div>
+                        </div>
+
+                        <div class="personal d-flex flex-row align-items-center">
+                            <i class="fa-solid fa-car-side"></i>
+                            <div class="views-personal d-flex flex-column">
+                                <strong>Đăng ký tạm trú</strong>
+                                <span><%= info.temporary_residence ? info.temporary_residence.replaceAll('|', ' - ') : 'Yen Binh IZ, Pho Yen, Thai Nguyen'%></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="pills-edit">edit</div>
+            <div class="tab-pane fade" id="pills-profile">2</div>
+            <div class="tab-pane fade row" id="pills-contact">
+                <div class="col-6 card">
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- END: Card DATA-->
+<script>
+    var tab_id = {
+        view: '#pills-home',
+        edit: '#pills-edit'
+    }
+    if (tab_id[window.location.hash.slice(1)] != undefined) {
+        //kích hoạt nút của trang đang chọn
+        $('#pills-tab .nav-link').removeClass('active');
+        $(`#pills-tab button[data-bs-target="${tab_id[window.location.hash.slice(1)]}"]`).addClass('active')
+        //hiện tab đang chọn
+        $('.tab-content .tab-pane').removeClass('show active');
+        $(`.tab-content ${tab_id[window.location.hash.slice(1)]}`).addClass('show active');
+
+    }
+</script>
+
+<%- include('../../includes/footer') %>

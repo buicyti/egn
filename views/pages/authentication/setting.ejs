@@ -1,0 +1,125 @@
+<%- include('../../includes/header') %>
+<%- include('../../includes/top') %>
+
+<style>
+    .password {
+        position: relative;
+    }
+
+    .password i {
+        position: absolute;
+        top: 12px;
+        right: 20px;
+    }
+</style>
+<div class=" d-flex align-items-start">
+    <div class="nav flex-column nav-pills me-3" aria-orientation="vertical">
+        <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#change-pass" type="button"
+            aria-selected="true">Đổi mật khẩu</button>
+        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#pin-code" type="button" aria-selected="false">Mã
+            PIN</button>
+        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#v-pills-messages" type="button"
+            aria-selected="false">Messages</button>
+        <button class="nav-link" data-bs-toggle="pill" data-bs-target="#v-pills-settings" type="button"
+            aria-selected="false">Settings</button>
+    </div>
+    <div class="tab-content">
+        <div class="tab-pane fade show active" id="change-pass">
+            <div class="card p-4" style="width: 500px">
+                <div class="mb-3 row">
+                    <label for="input-old-password" class="col-sm-4 col-form-label">Old Password</label>
+                    <div class="col-sm-8 password">
+                        <input type="password" class="form-control" id="input-old-password">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="input-new-password" class="col-sm-4 col-form-label">New Password</label>
+                    <div class="col-sm-8 password">
+                        <input type="password" class="form-control" id="input-new-password">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="input-re-new-password" class="col-sm-4 col-form-label">Repeat Password</label>
+                    <div class="col-sm-8 password">
+                        <input type="password" class="form-control" id="input-re-new-password">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary mb-3">Confirm identity</button>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="pin-code">
+            <div class="card p-4" style="width: 500px">
+
+            </div>
+        </div>
+        <div class="tab-pane fade" id="v-pills-messages">
+            <div class="card p-2" style="width: 500px">
+                hí hí
+            </div>
+        </div>
+        <div class="tab-pane fade" id="v-pills-settings">.5..
+        </div>
+    </div>
+</div>
+
+<script src="/vendor/sweetalert/sweetalert2.all.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(async function () {
+        //tạo form mã PIN
+        var check_PIN = await getFetch('/auth/PIN/check')
+        if (check_PIN == null) {
+            $('#pin-code .card').html(`
+            <p>Mã PIN sử dụng khi bạn đã quá lâu không thao tác trên trình duyệt. Màn hình làm việc sẽ tự khoá để bảo vệ dữ liệu của bạn</p>
+            <label for="pin_code" class="fw-bold">Bạn chưa tạo mã PIN. Hãy tạo 1 mã để mở khoá nhanh hơn nhé!</label>
+            <div class="input-group mt-2">
+                <input type="text" class="form-control" id="pin_code" placeholder="Tạo mã PIN" inputmode="numeric" maxlength="4">
+                <button class="btn btn-secondary" type="button" id="button-addon2">Tạo mã</button>
+            </div>
+            `)
+        } else {
+            $('#pin-code .card').html(`
+            <p>Mã PIN sử dụng khi bạn đã quá lâu không thao tác trên trình duyệt. Màn hình làm việc sẽ tự khoá để bảo vệ dữ liệu của bạn</p>
+            <label for="pin_code" class="fw-bold">Đổi mã PIN</label>
+            <div class="input-group mt-2">
+                <input type="text" class="form-control" id="pin_code" placeholder="Đổi mã PIN" inputmode="numeric" maxlength="4">
+                <button class="btn btn-secondary" type="button" id="button-addon2">Đổi mã</button>
+            </div>
+            `)
+        }
+        //sự kiện nhập
+        $('#pin_code').on('input', e => {
+            var val = $(e.currentTarget).val();
+            if (isNaN(val)) {
+                $(e.currentTarget).val(val.slice(0, -1))
+            }
+        })
+        $('#button-addon2').on('click', async () => {
+            var val = $('#pin_code').val();
+            if (val.length !== 4) {
+                Swal.fire({
+                    type: "success",
+                    title: "Kết quả!",
+                    text: `Mã PIN phải có đủ 4 chữ số`,
+                    confirmButtonClass: "btn btn-sm btn-success"
+                });
+            } else {
+                var kq_PIN = await getFetch('/auth/PIN/create', {
+                    pin_code: val
+                });
+                kq_PIN && Swal.fire({
+                    type: "success",
+                    title: "Kết quả!",
+                    text: `Mã PIN là ${val}!`,
+                    confirmButtonClass: "btn btn-sm btn-success"
+                });
+                $('#pin_code').val('')
+            }
+        })
+
+    });
+</script>
+
+<%- include('../../includes/footer') %>

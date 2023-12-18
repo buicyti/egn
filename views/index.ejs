@@ -1,0 +1,621 @@
+<%- include('./includes/header') %>
+<%- include('./includes/top') %>
+
+<div class="row justify-content-end">
+    <div class="col-sm-4 card p-3 m-2" style="width: 200px; border-radius: 10%;" id="ngay-thang">
+        <div class="dayOfWeek">Thứ bảy</div>
+        <div class="day">2</div>
+        <div class="amlich"> <span>01/01</span> (Âm lịch)</div>
+    </div>
+    <div class="col-sm-4 card p-4 m-2" style="width: 200px; border-radius: 10%;" id="dong-ho">
+        <div class="dong-ho">
+            <!-- <div class="info date">01/01/1900</div>
+            <div class="info day">Monday</div> -->
+            <div class="kim-gio"></div>
+            <div class="kim-phut"></div>
+            <div class="kim-giay"></div>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-end">
+    <div class="col-sm-6" style="width: 500px;">
+        <div class="card calendar">
+            <div class="card-header top">
+                <div class="btns prev"><i class="fas fa-chevron-left"></i>Tháng trước</div>
+                <div class="btns month">
+                    <div class="dropdown">1/2023</div>
+                    <div class="content">
+                        <div class="flex-fill d-flex flex-column">
+                            <i class="fas fa-chevron-up"></i>
+                            <b>1</b>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="flex-fill d-flex flex-column">
+                            <i class="fas fa-chevron-up"></i>
+                            <b>2023</b>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="btns next">Tháng sau<i class="fas fa-chevron-right"></i></div>
+            </div>
+            <div class="row-day" id="showMonths">
+                <!-- Ngày trong tháng sẽ hiện ở đây -->
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<style>
+    #ngay-thang .dayOfWeek {
+        width: 100%;
+        font-size: 28px;
+        font-style: normal;
+        text-align: center;
+        text-transform: uppercase;
+        color: #f76f6b;
+    }
+
+    #ngay-thang .day {
+        width: 100%;
+        font-size: 72px;
+        font-style: inherit;
+        font-weight: 600;
+        text-align: center;
+    }
+
+    #ngay-thang .amlich {
+        width: 100%;
+        font-style: italic;
+        text-align: center;
+        color: var(--bs-a-color);
+        opacity: .3;
+    }
+
+    .dong-ho {
+        margin: 0;
+        padding: 0;
+        background-color: #ececec;
+        width: var(--w);
+        aspect-ratio: 1 / 1;
+        position: relative;
+        border: calc(var(--w) / 20) solid rgb(95, 95, 95);
+        border-radius: 50%;
+        box-shadow: 0 1vw 2vw -.5vw #999797cc;
+    }
+
+
+    .so {
+        position: absolute;
+        top: 5%;
+        left: 50%;
+        transform: translate(50%);
+        transform-origin: 50% calc(var(--w) / 2.22222223 - var(--w) / 20);
+    }
+
+    .so span {
+        font-size: calc(var(--w) / 20);
+        font-weight: bold;
+        position: absolute;
+    }
+
+    .ben-ngoai {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: calc(var(--w) / 120);
+        height: calc(var(--w) / 30);
+        background-color: #666;
+        transform-origin: 50% calc(var(--w) / 2 - var(--w) / 20);
+    }
+
+    .ben-ngoai:nth-of-type(5n+1) {
+        width: calc(var(--w) / 60);
+        height: calc(var(--w) / 20);
+    }
+
+    .kim-gio {
+        position: absolute;
+        width: calc(var(--w) / 50);
+        height: calc(var(--w) / 6);
+        background-color: #333;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -100%);
+        transform-origin: 50% calc(var(--w) / 6);
+        border-top-left-radius: 50%;
+        border-top-right-radius: 50%;
+        /* z-index: 11; */
+    }
+
+    .kim-phut {
+        position: absolute;
+        width: calc(var(--w) / 60);
+        height: calc(var(--w) / 3.5);
+        background-color: #666;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -100%);
+        transform-origin: 50% calc(var(--w) / 3.5);
+        border-top-left-radius: 50%;
+        border-top-right-radius: 50%;
+        /*  z-index: 12; */
+    }
+
+    .kim-giay {
+        position: absolute;
+        width: calc(var(--w) / 120);
+        height: calc(var(--w) / 2.7);
+        background-color: gold;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -100%);
+        transform-origin: 50% calc(var(--w) / 2.7);
+        border-top-left-radius: 50%;
+        border-top-right-radius: 50%;
+        /* z-index: 13; */
+    }
+
+    .kim-giay::before {
+        content: '';
+        position: absolute;
+        width: calc(var(--w) / 120);
+        height: calc(var(--w) / 20);
+        background-color: gold;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .kim-giay::after {
+        content: '';
+        position: absolute;
+        width: calc(var(--w) / 40);
+        height: calc(var(--w) / 40);
+        background-color: rgb(250, 223, 71);
+        border-radius: 50%;
+        top: 100%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    /* .info {
+        position: absolute;
+        background-color: #ccc;
+        border-radius: calc(var(--w) / 40);
+        text-align: center;
+        color: black;
+        font-size: calc(var(--w) / 20);
+        left: 50%;
+        padding: 2px 5px;
+        transform: translateX(-50%);
+        letter-spacing: 2px;
+    }
+
+    .info.date {
+        top: 20%;
+    }
+
+    .info.day {
+        top: 70%;
+    } */
+
+    .card.calendar {
+        width: 100%;
+        height: 515px;
+    }
+
+
+
+    .card.calendar>.card-header.top {
+        height: 42px;
+        border-radius: 10px 10px 0 0;
+        line-height: 41px;
+        font-size: 11pt;
+        position: relative;
+        /*  z-index: 100; */
+    }
+
+
+    .card.calendar>.card-header.top>.btns {
+        color: #73ac3a;
+        top: 50%;
+        transform: translateY(-50%);
+        position: absolute;
+        cursor: pointer;
+    }
+
+    .card.calendar>.card-header.top>.btns>i {
+        margin: 5px;
+    }
+
+    .card.calendar>.card-header.top>.btns.prev {
+        left: 10px;
+    }
+
+    .card.calendar>.card-header.top>.btns.month {
+        width: 70px;
+        left: calc(50% - 35px);
+        text-align: center;
+        font-weight: 700;
+
+    }
+
+    .card.calendar>.card-header.top>.btns.month:hover .content {
+        display: flex;
+    }
+
+    .card.calendar>.card-header.top>.btns.month>.content {
+        display: none;
+        position: absolute;
+        background-color: var(--calendar-bg-content);
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    }
+
+    .card.calendar>.card-header.top>.btns.next {
+        left: auto;
+        right: 10px;
+    }
+
+
+
+
+
+
+    .card.calendar .row-day {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 15px 5px;
+        border: 1px solid var(--calendar-bg-content);
+        border-bottom: 0;
+        /*  z-index: 99; */
+    }
+
+    .card.calendar .row-day>.col-day {
+        flex: 0 0 auto;
+        background-color: var(--prtb2);
+        color: #7f7f7f;
+        width: 14.285714%;
+        border-right: 1px solid var(--calendar-bg-content);
+        border-bottom: 1px solid var(--calendar-bg-content);
+    }
+
+    .card.calendar .row-day>.col-day.prevMonths {
+        background-color: var(--calendar-bg-preday);
+    }
+
+    .card.calendar .row-day>.col-day.today {
+        background-color: #bad9ee;
+    }
+
+    .card.calendar .row-day>.col-day:nth-child(7n) {
+        color: #d9001b;
+        border-right: 0;
+    }
+
+    .card.calendar .row-day>.col-day:nth-child(-n + 7) {
+        background-color: var(--calendar-bg-head);
+        color: #fea10d;
+        text-align: center;
+        font-size: 12pt;
+        font-weight: 800;
+        height: 35px;
+        padding-top: 5px;
+    }
+
+    .card.calendar .row-day>.col-day:nth-child(n + 8) {
+        height: 65px;
+    }
+
+    .card.calendar .row-day>.col-day:nth-child(n + 8) .daySolar {
+        font-weight: 700;
+        font-size: 12pt;
+        margin: 5px;
+        position: relative;
+        display: inline-block;
+        height: 18px;
+    }
+
+    .card.calendar .row-day>.col-day:nth-child(n + 8) .dayLunar {
+        font-size: 8pt;
+        text-align: right;
+        margin: 5px;
+        height: 12px;
+    }
+</style>
+
+<script src="/vendor/moment/moment.min.js"></script>
+<script>
+    const weekday = ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"];
+    const CAN = new Array("Gi\341p", "\u1EA4t", "B\355nh", "\u0110inh", "M\u1EADu", "K\u1EF7", "Canh", "T\342n",
+        "Nh\342m", "Qu\375");
+    const CHI = new Array("T\375", "S\u1EEDu", "D\u1EA7n", "M\343o", "Th\354n", "T\u1EF5", "Ng\u1ECD", "M\371i",
+        "Th\342n", "D\u1EADu", "Tu\u1EA5t", "H\u1EE3i");
+    const GIO_HD = new Array("110100101100", "001101001011", "110011010010", "101100110100", "001011001101",
+        "010010110011");
+
+    for (let i = 0; i < 60; i++) {
+        //$('.ben-ngoai').append(`<span style="transform: rotate(${6 * i}deg);"></span>`)
+        $('.dong-ho').append(`<span class="ben-ngoai" style="transform: rotate(${6 * i}deg);"></span>`)
+    }
+    for (let i = 1; i <= 12; i++) {
+        $('.dong-ho').append(`<div class="so" style="transform:translateX(-50%) rotate(${6 *5 * i}deg);">
+            <span style="transform: translateX(-50%) rotate(-${6 *5 * i}deg);">${i}</span>
+            </div>`)
+    }
+
+    //đồng hồ
+    const update = () => {
+        const d = new Date();
+        const h = d.getHours();
+        const m = d.getMinutes();
+        const s = d.getSeconds();
+        const ms = d.getMilliseconds();
+        const dates = d.getDate();
+        const months = (d.getMonth() + 1) < 9 ? '0' + (d.getMonth() + 1) : (d.getMonth() + 1);
+        const years = d.getFullYear();
+        const days = weekday[d.getDay()];
+
+        const hDeg = (h % 12) * 30 + m / 60 * 6 * 5;
+        const mDeg = m * 6 + s / 60 * 6;
+        const sDeg = s * 6 + ms / 1000 * 6
+
+
+        $('.kim-gio').css('transform', `translate(-50%, -100%) rotate(${hDeg}deg)`);
+        $('.kim-phut').css('transform', `translate(-50%, -100%) rotate(${mDeg}deg)`);
+        $('.kim-giay').css('transform', `translate(-50%, -100%) rotate(${sDeg}deg)`);
+
+        if ($('#ngay-thang .dayOfWeek').html() != days) {
+            lunarday = convertSolar2Lunar(dates, months, years, 7);
+            lunarYear = getYearCanChi(lunarday.lunarYear)
+            $('#ngay-thang .dayOfWeek').html(days);
+            $('#ngay-thang .day').html(dates);
+            $('#ngay-thang .amlich').html(`${lunarday.lunarDay}/${lunarday.lunarMonth} ${lunarYear}`);
+        }
+    }
+
+
+    setInterval(update, 10);
+
+    //lịch âm
+    var PI = Math.PI;
+    var INT = (d) => {
+        return Math.floor(d)
+    };
+
+    function jdFromDate(dd, mm, yy) {
+        var a, y, m, jd;
+        a = INT((14 - mm) / 12);
+        y = yy + 4800 - a;
+        m = mm + 12 * a - 3;
+        jd = dd + INT((153 * m + 2) / 5) + 365 * y + INT(y / 4) - INT(y / 100) + INT(y / 400) - 32045;
+        if (jd < 2299161) {
+            jd = dd + INT((153 * m + 2) / 5) + 365 * y + INT(y / 4) - 32083;
+        }
+        return jd;
+    }
+
+
+    //Tính ngày Sóc
+    function getNewMoonDay(k, timeZone) {
+        var T, T2, T3, dr, Jd1, M, Mpr, F, C1, deltat, JdNew;
+        T = k / 1236.85;
+        T2 = T * T;
+        T3 = T2 * T;
+        dr = PI / 180;
+        Jd1 = 2415020.75933 + 29.53058868 * k + 0.0001178 * T2 - 0.000000155 * T3;
+        Jd1 = Jd1 + 0.00033 * Math.sin((166.56 + 132.87 * T - 0.009173 * T2) * dr);
+        M = 359.2242 + 29.10535608 * k - 0.0000333 * T2 - 0.00000347 * T3;
+        Mpr = 306.0253 + 385.81691806 * k + 0.0107306 * T2 + 0.00001236 * T3;
+        F = 21.2964 + 390.67050646 * k - 0.0016528 * T2 - 0.00000239 * T3;
+        C1 = (0.1734 - 0.000393 * T) * Math.sin(M * dr) + 0.0021 * Math.sin(2 * dr * M);
+        C1 = C1 - 0.4068 * Math.sin(Mpr * dr) + 0.0161 * Math.sin(dr * 2 * Mpr);
+        C1 = C1 - 0.0004 * Math.sin(dr * 3 * Mpr);
+        C1 = C1 + 0.0104 * Math.sin(dr * 2 * F) - 0.0051 * Math.sin(dr * (M + Mpr));
+        C1 = C1 - 0.0074 * Math.sin(dr * (M - Mpr)) + 0.0004 * Math.sin(dr * (2 * F + M));
+        C1 = C1 - 0.0004 * Math.sin(dr * (2 * F - M)) - 0.0006 * Math.sin(dr * (2 * F + Mpr));
+        C1 = C1 + 0.0010 * Math.sin(dr * (2 * F - Mpr)) + 0.0005 * Math.sin(dr * (2 * Mpr + M));
+        if (T < -11) {
+            deltat = 0.001 + 0.000839 * T + 0.0002261 * T2 - 0.00000845 * T3 - 0.000000081 * T * T3;
+        } else {
+            deltat = -0.000278 + 0.000265 * T + 0.000262 * T2;
+        };
+        JdNew = Jd1 + C1 - deltat;
+        return INT(JdNew + 0.5 + timeZone / 24)
+    }
+    // /Tính tọa độ mặt trời
+    function getSunLongitude(jdn, timeZone) {
+        var T, T2, dr, M, L0, DL, L;
+        T = (jdn - 2451545.5 - timeZone / 24) / 36525;
+        T2 = T * T;
+        dr = PI / 180;
+        M = 357.52910 + 35999.05030 * T - 0.0001559 * T2 - 0.00000048 * T * T2;
+        L0 = 280.46645 + 36000.76983 * T + 0.0003032 * T2;
+        DL = (1.914600 - 0.004817 * T - 0.000014 * T2) * Math.sin(dr * M);
+        DL = DL + (0.019993 - 0.000101 * T) * Math.sin(dr * 2 * M) + 0.000290 * Math.sin(dr * 3 * M);
+        L = L0 + DL;
+        L = L * dr;
+        L = L - PI * 2 * (INT(L / (PI * 2)));
+        return INT(L / PI * 6)
+    }
+    // /Tìm ngày bắt đầu tháng 11 âm lịch
+    function getLunarMonth11(yy, timeZone) {
+        var k, off, nm, sunLong;
+        off = jdFromDate(31, 12, yy) - 2415021;
+        k = INT(off / 29.530588853);
+        nm = getNewMoonDay(k, timeZone);
+        sunLong = getSunLongitude(nm, timeZone);
+        if (sunLong >= 9) {
+            nm = getNewMoonDay(k - 1, timeZone);
+        }
+        return nm;
+    }
+    //Xác định tháng nhuận
+    function getLeapMonthOffset(a11, timeZone) {
+        var k, last, arc, i;
+        k = INT((a11 - 2415021.076998695) / 29.530588853 + 0.5);
+        last = 0;
+        i = 1; // We start with the month following lunar month 11
+        arc = getSunLongitude(getNewMoonDay(k + i, timeZone), timeZone);
+        do {
+            last = arc;
+            i++;
+            arc = getSunLongitude(getNewMoonDay(k + i, timeZone), timeZone);
+        } while (arc != last && i < 14);
+        return i - 1;
+    }
+
+    function convertSolar2Lunar(dd, mm, yy, timeZone) {
+        var k, dayNumber, monthStart, a11, b11, lunarDay, lunarMonth, lunarYear, lunarLeap;
+        dayNumber = jdFromDate(dd, mm, yy);
+        k = INT((dayNumber - 2415021.076998695) / 29.530588853);
+        monthStart = getNewMoonDay(k + 1, timeZone);
+        if (monthStart > dayNumber) {
+            monthStart = getNewMoonDay(k, timeZone);
+        }
+        a11 = getLunarMonth11(yy, timeZone);
+        b11 = a11;
+        if (a11 >= monthStart) {
+            lunarYear = yy;
+            a11 = getLunarMonth11(yy - 1, timeZone);
+        } else {
+            lunarYear = yy + 1;
+            b11 = getLunarMonth11(yy + 1, timeZone);
+        }
+        lunarDay = dayNumber - monthStart + 1;
+        diff = INT((monthStart - a11) / 29);
+        lunarLeap = 0;
+        lunarMonth = diff + 11;
+        if (b11 - a11 > 365) {
+            leapMonthDiff = getLeapMonthOffset(a11, timeZone);
+            if (diff >= leapMonthDiff) {
+                lunarMonth = diff + 10;
+                if (diff == leapMonthDiff) {
+                    lunarLeap = 1;
+                }
+            }
+        }
+        if (lunarMonth > 12) {
+            lunarMonth = lunarMonth - 12;
+        }
+        if (lunarMonth >= 11 && diff < 4) {
+            lunarYear -= 1;
+        }
+
+        return {
+            lunarDay: lunarDay,
+            lunarMonth: lunarMonth,
+            lunarYear: lunarYear,
+            lunarLeap: lunarLeap,
+            jd: dayNumber
+        }
+    }
+
+
+    function getYearCanChi(year) {
+        return CAN[(year + 6) % 10] + " " + CHI[(year + 8) % 12];
+    }
+
+    function getGioHoangDao(jd) {
+        var chiOfDay = (jd + 1) % 12;
+        var gioHD = GIO_HD[chiOfDay % 6];
+        var ret = "";
+        var count = 0;
+        for (var i = 0; i < 12; i++) {
+            if (gioHD.charAt(i) == '1') {
+                ret += CHI[i];
+                ret += ' (' + (i * 2 + 23) % 24 + '-' + (i * 2 + 1) % 24 + ')';
+                if (count++ < 5) ret += ', ';
+                if (count == 3) ret += '\n';
+            }
+        }
+        return ret;
+    }
+
+    function getCanChi(lunar) {
+        var dayName, monthName, yearName;
+        dayName = CAN[(lunar.jd + 9) % 10] + " " + CHI[(lunar.jd + 1) % 12];
+        monthName = CAN[(lunar.lunarYear * 12 + lunar.lunarMonth + 3) % 10] + " " + CHI[(lunar.lunarMonth + 1) % 12];
+        if (lunar.leap == 1) {
+            monthName += " (nhuận)";
+        }
+        yearName = getYearCanChi(lunar.lunarYear);
+        return new Array(dayName, monthName, yearName);
+    }
+
+
+
+    var currentDate = moment();
+    const renderCalendar = () => {
+        let listDay = "";
+        currMonth = currentDate.month();
+        currentDate.startOf('month');
+        //kiểm tra xem ngày đầu tiên trong tháng là thứ mấy, sau đó lùi lại để lấy ngày đầu tiên của tuần đó
+        if (currentDate.day() === 0) currentDate.add(-7, 'd');
+        else currentDate.add(-currentDate.day(), 'd');
+        for (let i = 0; i < 42; i++) {
+            //cộng thêm 1 ngày
+            currentDate.add(1, 'd');
+            //chuyển ngày dương sang ngày âm
+            lunaDate = convertSolar2Lunar(
+                parseInt(moment(currentDate).format('DD')),
+                parseInt(moment(currentDate).format('MM')),
+                parseInt(moment(currentDate).format('YYYY')),
+                7.0);
+
+            listDay += `<div class="col-day${currentDate.format('YYYYMMDD') == moment().format('YYYYMMDD') ? ' today' : ''}${currentDate.month() != currMonth ? ' prevMonths' : ''}">
+                <div class="daySolar">${moment(currentDate).format('DD')} </div>
+                <div class="dayLunar${lunaDate.lunarDay == 1 ? ' fw-bold' : ''}">${lunaDate.lunarDay == 1 ? lunaDate.lunarDay + '/'+ lunaDate.lunarMonth + (lunaDate.lunarLeap == 1 ? ' (*)' : '') : lunaDate.lunarDay}</div>
+                </div>`;
+        }
+        currentDate.add(-1, 'month');
+        //hiện ra html
+        $('.card.calendar .btns.month .dropdown').html(currentDate.format('MM/YYYY'));
+        $('.card.calendar .btns.month b:eq(0)').html(currentDate.format('MM'));
+        $('.card.calendar .btns.month b:eq(1)').html(currentDate.format('YYYY'));
+        $('#showMonths').html(
+            `<div class="col-day">T2</div>
+            <div class="col-day">T3</div>
+            <div class="col-day">T4</div>
+            <div class="col-day">T5</div>
+            <div class="col-day">T6</div>
+            <div class="col-day">T7</div>
+            <div class="col-day">CN</div>`
+        );
+        $('#showMonths').append(listDay);
+
+    }
+    $('.btns.prev, .btns.month i:eq(1)').on('click', function () {
+        currentDate.subtract(1, 'month')
+        renderCalendar();
+    })
+
+    $('.btns.next, .btns.month i:eq(0)').on('click', function () {
+        currentDate.add(1, 'month')
+        renderCalendar();
+    })
+    $('.btns.month i:eq(3)').on('click', function () {
+        currentDate.subtract(1, 'year')
+        renderCalendar();
+    })
+    $('.btns.month i:eq(2)').on('click', function () {
+        currentDate.add(1, 'year')
+        renderCalendar();
+    })
+
+    $(document).ready(function () {
+        update();
+        renderCalendar();
+        $('#dong-ho').css('--w', $('#dong-ho').width() + 'px')
+    });
+    $(window).resize(function () {
+        $('#dong-ho').css('--w', $('#dong-ho').width() + 'px')
+    });
+</script>
+<%- include('./includes/footer') %>

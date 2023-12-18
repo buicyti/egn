@@ -1,0 +1,263 @@
+<%- include('../../includes/header') %>
+<%- include('../../includes/top') %>
+<link rel="stylesheet" href="/stylesheets/audio.css" />
+<div class="container-sm">
+    <div class="row">
+        <div class="col-sm-12 col-md-5">
+
+
+
+            <div class="playlist-box">
+                <div class="header">
+                    <p>Playlist</p>
+                </div>
+
+                <!-- <div class="list-song"> -->
+                <% for(var i in listMp3){ var urls = Object.keys(listMp3[i]) %>
+
+                <div class="song-info d-flex">
+                    <% if(listMp3[i][urls].image){ %>
+                    <img src="data:<%= listMp3[i][urls].image.mime %>;base64,<%= Buffer.from(listMp3[i][urls].image.imageBuffer).toString('base64') %>"
+                        alt="<%= listMp3[i][urls].album %>" />
+                    <% } else { %>
+                    <img src="/images/default/music-disc.png" />
+                    <% } %>
+                    <div class="info d-flex flex-column">
+                        <span class="name-song">
+                            <%= (listMp3[i][urls].title) ? listMp3[i][urls].title : urls.toString().slice(0, -4) %>
+                        </span>
+                        <span class="author">
+                            <%= listMp3[i][urls].artist ? listMp3[i][urls].artist : 'Không rõ' %>
+                        </span>
+                    </div>
+                    <div class="ms-auto">
+                        <url class="d-none"><%= urls %></url>
+                        <i class="fa-solid fa-ellipsis"></i>
+                    </div>
+                </div>
+
+
+                <%  } %>
+
+
+                <!-- </div> -->
+            </div>
+
+
+
+        </div>
+        <div class="col-sm-12 col-md-7">
+
+
+
+            <div class="music-content">
+                <button class="play-list">
+                    Upload
+                    <i class="fas fa-list"></i>
+                </button>
+                <section class="music-content-box">
+                    <div class="thumbnail-song">
+                        <img class="rotate-ani" src="/images/default/music-disc.png" alt="" />
+                    </div>
+                    <div class="content-wrapper">
+                        <div class="info-song">
+                            <p class="song-name">-</p>
+                            <p class="author">-</p>
+                        </div>
+                    </div>
+                </section>
+                <audio id="audio" controls hidden></audio>
+                <div class="bar-song">
+                    <span class="current-time">00:00</span>
+                    <div class="progress">
+                        <div class="progress-bar"></div>
+                    </div>
+                    <span class="duration-time">00:00</span>
+                    <div class="volume">
+                        <i class="fa-solid fa-volume-high"></i>
+                        <span>
+                            <p>80%</p>
+                            <input type="range" value="80" id="rangeVolume" />
+                        </span>
+                    </div>
+                </div>
+                <div class="song-footer">
+                    <button class="back">
+                        <i class="fas fa-step-backward"></i>
+                    </button>
+                    <button class="play-song">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button class="forward">
+                        <i class="fas fa-step-forward"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- <audio controls>
+                <source src="/audio/Buon-Cua-Anh-Masew-Mix-Masew-Dat-G-K-ICM.mp3" />
+                <source src="/audio/GioKhongCuoiThiNaoCuoiSpeedUp-HongQuanWyTyYoungP-12284984.mp3" />
+                <source src="/audio/Cat-Doi-Noi-Sau-Tang-Duy-Tan-Drum7.mp3" />
+            </audio> -->
+        </div>
+    </div>
+</div>
+
+
+<script>
+    var playing = false;
+
+    function formatTime(sec_num) {
+        let hours = Math.floor(sec_num / 3600);
+        let minutes = Math.floor((sec_num - hours * 3600) / 60);
+        let seconds = Math.floor(sec_num - hours * 3600 - minutes * 60);
+
+        hours = hours < 10 ? (hours > 0 ? "0" + hours : 0) : hours;
+        minutes = (minutes < 10) ? "0" + minutes : minutes;
+        seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+        return (hours !== 0 ? hours + ":" : "") + minutes + ":" + seconds;
+    }
+
+
+
+
+    //load song
+    function loadSong(url, image, title, author) {
+        $(".progress-bar").css('width', '0%');
+        $(".thumbnail-song img").attr('src', image);
+        $('.info-song .song-name').html(title)
+        $('.info-song .author').html(author);
+        $("#audio").attr('src', '/audio/' + url);
+
+        $("#audio").on("loadedmetadata", async function () {
+            await $('.bar-song .duration-time').html(formatTime($("#audio")[0]
+                .duration)); //lấy thời gian bài hát
+        });
+
+        playSong();
+        $("#audio")[0].play();
+    }
+
+    // play song
+    function playSong() {
+        playing = true;
+        $(".thumbnail-song img").css("-webkit-animation-play-state", "running");
+        $(".play-song .fas").removeClass("fa-play").addClass("fa-pause");
+    };
+    // pause song
+    function pauseSong() {
+        playing = false;
+        $(".thumbnail-song img").css("-webkit-animation-play-state", "paused");
+        $(".play-song .fas").removeClass("fa-pause").addClass("fa-play");
+    };
+
+    function forwardSong(element) {
+        $('.song-info').removeClass('active');
+        $(element).addClass('active');
+        loadSong($(element).find('.d-none').html(),
+            $(element).find('img').attr('src'),
+            $(element).find('.name-song').html(),
+            $(element).find('.author').html()
+        )
+    }
+    //nút ấn bắt đầu, tạm dừng
+    $(".play-song").on("click", () => {
+        if (playing) {
+            pauseSong();
+            $("#audio")[0].pause();
+        } else {
+            playSong();
+            $("#audio")[0].play();
+        }
+    })
+    //nút ấn bài hát tiếp theo
+    $(".forward").on("click", () => {
+        if (!$('.song-info.active').next().length) {
+            alert('Đã đến cuối danh sách')
+            return;
+        }
+        forwardSong($('.song-info.active').next()[0])
+        //console.log('forward')
+    })
+    //nút ấn bài hát phía trước
+    $(".back").on("click", () => {
+        if (!$('.song-info.active').prev().length || $('.song-info.active').prev().hasClass('header')) {
+            alert('Đã ở đầu danh sách')
+            return;
+        }
+        forwardSong($('.song-info.active').prev()[0])
+        console.log('back')
+    })
+
+    //sự kiện của bài hát đang phát
+    $("#audio").on('timeupdate', e => {
+        const {
+            currentTime,
+            duration
+        } = e.currentTarget;
+
+        $(".progress-bar").css('width', `${(currentTime / duration) * 100}%`);
+        $('.bar-song .current-time').html(formatTime(currentTime))
+    });
+
+    $("#audio").on("pause", pauseSong);
+    $("#audio").on("play", playSong);
+    $("#audio").on("ended", () => $(".forward").trigger('click')); //hết bài tự chuyển
+
+
+
+    //thao tác trên thanh thời gian
+    $('.progress').on('click', e => {
+        const width = e.offsetX;
+        const progress = e.currentTarget;
+        $(".progress-bar").css('width', `${(width / progress.clientWidth) * 100}%`);
+
+        var curTime = (width * $("#audio")[0].duration) / progress.clientWidth;
+        $("#audio")[0].currentTime = curTime;
+        $('.bar-song .current-time').html(formatTime(curTime))
+    })
+    //âm lượng
+    $('#rangeVolume').on('change', (e) => {
+        var vol = $(e.currentTarget).val()
+        $('.volume p').html(vol + '%')
+        $('#audio')[0].volume = vol / 100;
+    })
+    $('.volume i').on('click', function () {
+        if ($(this).hasClass('fa-volume-high')) {
+            $(this).removeClass('fa-volume-high').addClass('fa-volume-xmark')
+            $('#audio')[0].muted = true;
+            $('#rangeVolume').prop('disabled', true);
+        } else {
+            $(this).removeClass('fa-volume-xmark').addClass('fa-volume-high')
+            var vol = $('#rangeVolume').val();
+            $('#rangeVolume').prop('disabled', false)
+            $('#audio')[0].muted = false;
+        }
+    })
+    //sự kiện chọn bài hát
+    $('.song-info').on('click', (e) => {
+        $('.song-info').removeClass('active');
+        $(e.currentTarget).addClass('active');
+        loadSong($(e.currentTarget).find('.d-none').html(),
+            $(e.currentTarget).find('img').attr('src'),
+            $(e.currentTarget).find('.name-song').html(),
+            $(e.currentTarget).find('.author').html()
+        )
+    })
+    $('.song-info').on('contextmenu', function (e) {
+        e.preventDefault();
+        console.log('success!');
+        return false;
+    });
+
+
+
+
+    $(document).ready(function () {
+        $("#audio")[0].volume = .8; //ẩm lượng mặc định 80% để bảo vệ tai nhé
+    });
+</script>
+
+
+<%- include('../../includes/footer') %>

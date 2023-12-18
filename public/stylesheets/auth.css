@@ -1,0 +1,22 @@
+ul.reg-check {
+    list-style: none;
+    position: relative;
+}
+
+ul.reg-check li.text-success::before {
+    content: '\f00c';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 600;
+    position: absolute;
+    left: 0px;
+    font-size: 10px;
+}
+
+ul.reg-check li.text-danger::before {
+    content: '\f00d';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 600;
+    position: absolute;
+    left: 0px;
+    font-size: 10px;
+}
