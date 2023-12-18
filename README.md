@@ -1,7 +1,7 @@
 #chả biết viết cái quái gì ở đây cả
 
 #lệnh chạy
-npm run dev
+1. npm run dev
 
 #cài trên máy chủ
 1. Tải .git về
