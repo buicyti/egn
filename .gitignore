@@ -1,0 +1,12 @@
+#các file module
+/node_modules/
+
+
+#các file copy vào
+/public/audio/
+/public/images/avatars/
+/public/uploads/
+
+
+#các file test
+test.js
