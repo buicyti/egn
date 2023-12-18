@@ -1,5 +1,6 @@
 #chả biết viết cái quái gì ở đây cả
-#lệnh chạy tự động
+
+#lệnh chạy
 npm run dev
 
 #cài trên máy chủ
